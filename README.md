@@ -38,7 +38,7 @@ spec:
 status: {}
 ```
 
-![Screenshot (1493)](https://github.com/satya19977/K8S-Security-With-Kyverno-and-ArgoCD/assets/108000447/648aff10-3942-423b-a212-2f82d4665bb9)
+![Screenshot (1494)](https://github.com/satya19977/K8S-Security-With-Kyverno-and-ArgoCD/assets/108000447/96ef7051-3b41-4a85-9714-5afa3a0c2208)
 
 
 #### Using Kyverno, we can
