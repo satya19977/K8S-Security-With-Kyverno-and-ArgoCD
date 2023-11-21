@@ -5,9 +5,10 @@
 
 ## Solution
 #### So Kyverno is an Advanced Admission Controller where it evaluates, based on rules whether to deploy certain resoucres or not. In our case if we enforce a Kyverno policy that sets resources  limit to not cross  say 2GB, if we deployed a pod with 5GB Memory it would reject our request
+![Screenshot (1492)](https://github.com/satya19977/K8S-Security-With-Kyverno-and-ArgoCD/assets/108000447/3a9559d2-1691-43c7-b224-d35dd37454c5)
 
 #### Using Kyverno, we can
-1. Generate --> For example, Automatically Add Label to Namespaces
+1. Generate --> For example, Create a default network policy whenever a namespace is created.
 
 2. Validate --> For example, Enforce CPU and Memory Resource Limits
 
