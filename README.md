@@ -61,6 +61,17 @@ status: {}
 kubectl create -f https://github.com/kyverno/kyverno/releases/download/v1.8.5/install.yaml
 ```
 
+## ArgoCD
+![Untitled Diagram drawio(2)](https://github.com/satya19977/K8S-Security-With-Kyverno-and-ArgoCD/assets/108000447/359fb009-d48e-48e5-9906-6894eab1f2b7)
+
+### Components of ArgoCD
+#### Repo Server        --> This is used to watch the state of the version control system like github
+#### Application Server --> This watches the state of Kubernetes Cluster
+#### API Server --> It is useful for interacting with ArgoCD
+#### Dex --> Provides authentication 
+#### Redis --> Used for caching
+
+
 ## ArgoCD Insallation Using Helm
 
 ```
