@@ -80,5 +80,86 @@ kubectl create -f https://github.com/kyverno/kyverno/releases/download/v1.8.5/in
  helm install argo argo/argo-cd
 
 ```
+## Testing 
+
+### We create a sample deployment with two replicas.
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+  creationTimestamp: "2023-11-23T00:37:35Z"
+  generation: 1
+  labels:
+    app: nginx
+  name: nginx
+  namespace: default
+  resourceVersion: "4400"
+  uid: b038e5d5-5b80-4665-a83a-6a9a48151a83
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 2
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: nginx
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - image: nginx
+        imagePullPolicy: Always
+        name: nginx
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+status:
+  availableReplicas: 2
+  conditions:
+  - lastTransitionTime: "2023-11-23T00:37:56Z"
+    lastUpdateTime: "2023-11-23T00:37:56Z"
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  - lastTransitionTime: "2023-11-23T00:37:35Z"
+    lastUpdateTime: "2023-11-23T00:37:56Z"
+    message: ReplicaSet "nginx-748c667d99" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  observedGeneration: 1
+  readyReplicas: 2
+  replicas: 2
+  updatedReplicas: 2
+
+```
+### Two pods are running below
+![Screenshot (1495)](https://github.com/satya19977/K8S-Security-With-Kyverno-and-ArgoCD/assets/108000447/8dcd2789-a47c-4bb9-9d93-6835642aaf5c)
+
+### ArgoCD is watchinf the state of our repo and is in sync
+![Screenshot (1498)](https://github.com/satya19977/K8S-Security-With-Kyverno-and-ArgoCD/assets/108000447/46b82489-0717-447c-bedf-6e8d2cc3e937)
+
+
+### In our git repo, i increased the replcias to 5
+![Screenshot (1497)](https://github.com/satya19977/K8S-Security-With-Kyverno-and-ArgoCD/assets/108000447/7df01408-8006-4b92-abc9-ff0effe67658)
+
+### Result
+![Screenshot (1499)](https://github.com/satya19977/K8S-Security-With-Kyverno-and-ArgoCD/assets/108000447/9c990449-7897-4ced-b3f1-9657d5130c8e)
+
 
 
