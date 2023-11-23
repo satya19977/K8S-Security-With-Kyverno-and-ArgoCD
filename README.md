@@ -87,65 +87,27 @@ kubectl create -f https://github.com/kyverno/kyverno/releases/download/v1.8.5/in
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    deployment.kubernetes.io/revision: "1"
-  creationTimestamp: "2023-11-23T00:37:35Z"
-  generation: 1
+  creationTimestamp: null
   labels:
-    app: nginx
-  name: nginx
-  namespace: default
-  resourceVersion: "4400"
-  uid: b038e5d5-5b80-4665-a83a-6a9a48151a83
+    app: nginx1
+  name: nginx1
 spec:
-  progressDeadlineSeconds: 600
   replicas: 2
-  revisionHistoryLimit: 10
   selector:
     matchLabels:
-      app: nginx
-  strategy:
-    rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 25%
-    type: RollingUpdate
+      app: nginx1
+  strategy: {}
   template:
     metadata:
       creationTimestamp: null
       labels:
-        app: nginx
+        app: nginx1
     spec:
       containers:
       - image: nginx
-        imagePullPolicy: Always
         name: nginx
         resources: {}
-        terminationMessagePath: /dev/termination-log
-        terminationMessagePolicy: File
-      dnsPolicy: ClusterFirst
-      restartPolicy: Always
-      schedulerName: default-scheduler
-      securityContext: {}
-      terminationGracePeriodSeconds: 30
-status:
-  availableReplicas: 2
-  conditions:
-  - lastTransitionTime: "2023-11-23T00:37:56Z"
-    lastUpdateTime: "2023-11-23T00:37:56Z"
-    message: Deployment has minimum availability.
-    reason: MinimumReplicasAvailable
-    status: "True"
-    type: Available
-  - lastTransitionTime: "2023-11-23T00:37:35Z"
-    lastUpdateTime: "2023-11-23T00:37:56Z"
-    message: ReplicaSet "nginx-748c667d99" has successfully progressed.
-    reason: NewReplicaSetAvailable
-    status: "True"
-    type: Progressing
-  observedGeneration: 1
-  readyReplicas: 2
-  replicas: 2
-  updatedReplicas: 2
+status: {}
 
 ```
 ### Two pods are running below
