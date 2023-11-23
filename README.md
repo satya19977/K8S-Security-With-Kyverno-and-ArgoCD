@@ -151,7 +151,7 @@ status:
 ### Two pods are running below
 ![Screenshot (1495)](https://github.com/satya19977/K8S-Security-With-Kyverno-and-ArgoCD/assets/108000447/8dcd2789-a47c-4bb9-9d93-6835642aaf5c)
 
-### ArgoCD is watchinf the state of our repo and is in sync
+### ArgoCD is watching the state of our repo and is in sync
 ![Screenshot (1498)](https://github.com/satya19977/K8S-Security-With-Kyverno-and-ArgoCD/assets/108000447/46b82489-0717-447c-bedf-6e8d2cc3e937)
 
 
