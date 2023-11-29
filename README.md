@@ -8,10 +8,12 @@
 #### So Kyverno is an Advanced Admission Controller where it evaluates, based on rules whether to deploy certain resoucres or not. In our case if we enforce a Kyverno policy that sets resources  limit to not cross  say 2GB, if we deployed a pod with 5GB Memory it would reject our request
 
 
-To explain briefly, we write our kyverno policy and push it github repo. Since ArgoCD is configured to watch for changes in the Repo and sync it with the cluster, ArgoCD will deploy the necessary changes to our Namespace.
 
 ## High Level Design
 ![Untitled Diagram drawio(1)](https://github.com/satya19977/K8S-Security-With-Kyverno-and-ArgoCD/assets/108000447/99dc40e1-42cd-452d-8835-df1773a7adb9)
+
+To explain briefly, we write our kyverno policy and push it github repo. Since ArgoCD is configured to watch for changes in the Repo and sync it with the cluster, ArgoCD will deploy the necessary changes to our Namespace.
+
 
 ## Install Kyverno Using Manifest Files
 ```
