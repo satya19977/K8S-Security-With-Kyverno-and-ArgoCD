@@ -82,46 +82,141 @@ kubectl create -f https://github.com/kyverno/kyverno/releases/download/v1.8.5/in
 ```
 ## Testing 
 
-### We create a sample deployment with two replicas.
+### Case1. Auto-Sync 
+
+Our Cluster has no pods deployed in the default namespace
+
+![Screenshot (1504)](https://github.com/satya19977/K8S-Security-With-Kyverno-and-ArgoCD/assets/108000447/9dd0b7ea-f331-44ee-92eb-a44743c1fec2)
+
+We upload a deployment yaml file in our git repo 
+
 ```
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  creationTimestamp: null
-  labels:
-    app: nginx1
-  name: nginx1
+  name: nginx-app
 spec:
-  replicas: 2
   selector:
     matchLabels:
-      app: nginx1
-  strategy: {}
+      app: nginx-app
+  replicas: 2
   template:
     metadata:
-      creationTimestamp: null
       labels:
-        app: nginx1
+        app: nginx-app
     spec:
       containers:
-      - image: nginx
-        name: nginx
-        resources: {}
-status: {}
+      - name: ng
+        image: nginx
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+
+# Seperate files in github
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginxpp-service
+spec:
+  selector:
+    app: nginx-app 
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+```
+We now proceed to build ArgoCD
+
+1. Source - Our github link and the path is our folder name where yaml files are stored
+
+2. Destination - Where our K8S cluster is running
+
+3. Note - Selfheal and pruning are disabled by default
 
 ```
-### Two pods are running below
-![Screenshot (1495)](https://github.com/satya19977/K8S-Security-With-Kyverno-and-ArgoCD/assets/108000447/8dcd2789-a47c-4bb9-9d93-6835642aaf5c)
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: sample-test
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/satya19977/argo-kyverno-testing
+    targetRevision: HEAD
+    path: argo-kyverno
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+    automated:
+     selfHeal: true
+     prune: true  
+```
+ArgoCD uses git as the single source of truth and synced our cluster with Git repo
+![Screenshot (1507)](https://github.com/satya19977/K8S-Security-With-Kyverno-and-ArgoCD/assets/108000447/85245cb4-ec3d-439e-834b-608dbbfaad04)
 
-### ArgoCD is watching the state of our repo and is in sync
-![Screenshot (1498)](https://github.com/satya19977/K8S-Security-With-Kyverno-and-ArgoCD/assets/108000447/46b82489-0717-447c-bedf-6e8d2cc3e937)
+As Evident, we have all the resources defined in our Git
+![Screenshot (1506)](https://github.com/satya19977/K8S-Security-With-Kyverno-and-ArgoCD/assets/108000447/a8094de7-853d-4b22-acf5-9d9ed44c4dd6)
+
+### Case2. Self-Healing
+
+If this is enabled, any change made directly in the cluster isn't enforced.
+
+Let's increase the number of replicas directly in the cluster directly and observer what happens
+
+![Screenshot (1512)](https://github.com/satya19977/K8S-Security-With-Kyverno-and-ArgoCD/assets/108000447/d22bcac5-7709-430b-9517-58b346d700ec)
+
+![Screenshot (1513)](https://github.com/satya19977/K8S-Security-With-Kyverno-and-ArgoCD/assets/108000447/6ea53525-1574-4b57-a19a-e5969330f10b)
+
+Even though we manually made change to our cluster since selfheal is enabled, argocd will not push those changes
+
+### Case3. Enable Prune
+
+Since prune is enabled any change in the Git will also reflect in our cluster.
+![Screenshot (1518)](https://github.com/satya19977/K8S-Security-With-Kyverno-and-ArgoCD/assets/108000447/8cbe81d3-3290-48ba-923b-5fa598baafcf)
+
+Changing the name of the deployment to deployment-app in the repo has been propgated to the cluster as well
 
 
-### In our git repo, i increased the replcias to 5
-![Screenshot (1497)](https://github.com/satya19977/K8S-Security-With-Kyverno-and-ArgoCD/assets/108000447/7df01408-8006-4b92-abc9-ff0effe67658)
+![Screenshot (1517)](https://github.com/satya19977/K8S-Security-With-Kyverno-and-ArgoCD/assets/108000447/47a96227-5d56-40fc-9c7c-03f713ae0169)
 
-### Result
-![Screenshot (1499)](https://github.com/satya19977/K8S-Security-With-Kyverno-and-ArgoCD/assets/108000447/9c990449-7897-4ced-b3f1-9657d5130c8e)
+### Cae4. Let's deploy a pod with no limits and resources and see how kyverno reacts.
+
+This is the yaml file in our git
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-nginx
+spec:
+  selector:
+    matchLabels:
+      app: nginx-app
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: nginx-app
+    spec:
+      containers:
+      - name: ng
+        image: nginx
+        ports:
+        - containerPort: 8080
+```
+We see here that the pod has been deployed because in our kyverno policy we just set validatefailureaction to audit rathen than enforce. So that's why our pod has been deployed but the logs give us a warning to enforce resource limits in our pod
+
+![Screenshot (1521)](https://github.com/satya19977/K8S-Security-With-Kyverno-and-ArgoCD/assets/108000447/585a5be8-7e9c-41b1-ac9a-ceeaa1a7d061)
 
 
 
