@@ -14,6 +14,17 @@
 
 To explain briefly, we write our kyverno policy and push it github repo. Since ArgoCD is configured to watch for changes in the Repo and sync it with the cluster, ArgoCD will deploy the necessary changes to our Namespace.
 
+## The Heart of Kyverno
+Kyverno is a policy engine designed for Kubernetes
+
+A Kyverno policy is a collection of rules. Each rule consists of a match declaration, an optional exclude declaration, and one of a validate, mutate, generate, or verifyImages declaration. Each rule can contain only a single validate, mutate, generate, or verifyImages child declaration.
+
+
+
+![Kyverno-Policy-Structure](https://github.com/satya19977/K8S-Security-With-Kyverno-and-ArgoCD/assets/108000447/a8b4632d-3748-416b-8338-d49e79434aab)
+
+Policies can be defined as cluster-wide resources (using the kind ClusterPolicy) or namespaced resources (using the kind Policy.) As expected, namespaced policies will only apply to resources within the namespace in which they are defined while cluster-wide policies are applied to matching resources across all namespaces. Otherwise, there is no difference between the two types.
+
 
 ## Install Kyverno Using Manifest Files
 ```
