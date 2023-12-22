@@ -237,7 +237,7 @@ spec:
         ports:
         - containerPort: 8080
 ```
-We see here that the pod has been deployed because in our kyverno policy we just set validatefailureaction to audit rathen than enforce. So that's why our pod has been deployed but the logs give us a warning to enforce resource limits in our pod
+We see here that the pod has been deployed because in our kyverno policy we  set validatefailureaction to audit and not enforce. So that's why our pod has been deployed but the logs give us a warning to enforce resource limits in our pod
 
 ![Screenshot (1521)](https://github.com/satya19977/K8S-Security-With-Kyverno-and-ArgoCD/assets/108000447/585a5be8-7e9c-41b1-ac9a-ceeaa1a7d061)
 
