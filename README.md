@@ -195,7 +195,7 @@ As Evident, we have all the resources defined in our Git
 
 If this is enabled, any change made directly in the cluster isn't enforced.
 
-Let's increase the number of replicas directly in the cluster directly and observer what happens
+Let's increase the number of replicas directly in the cluster and observer what happens
 
 ![Screenshot (1512)](https://github.com/satya19977/K8S-Security-With-Kyverno-and-ArgoCD/assets/108000447/d22bcac5-7709-430b-9517-58b346d700ec)
 
