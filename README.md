@@ -208,7 +208,7 @@ Even though we manually made change to our cluster since selfheal is enabled, ar
 Since prune is enabled any change in the Git will also reflect in our cluster.
 ![Screenshot (1518)](https://github.com/satya19977/K8S-Security-With-Kyverno-and-ArgoCD/assets/108000447/8cbe81d3-3290-48ba-923b-5fa598baafcf)
 
-Changing the name of the deployment to deployment-app in the repo has been propgated to the cluster as well
+Changing the name of the deployment from nginx-app to deployment-nginx has caused the previous deployment  to be deleted and the deployment with the new name was created
 
 
 ![Screenshot (1517)](https://github.com/satya19977/K8S-Security-With-Kyverno-and-ArgoCD/assets/108000447/47a96227-5d56-40fc-9c7c-03f713ae0169)
